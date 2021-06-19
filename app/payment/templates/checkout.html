@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+    <h2>Payment Home</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label id="name" for="name">Name: </label>
+        <input type="text" name="name" required>
+        <label id="email" for="email">Email: </label>
+        <input type="email" name="email" required>
+        <label for="product">Product: </label>
+        <input id="product" type="text" name="product" required>
+        <label id="amount" for="amount">Amount: </label>
+        <input type="number" name="amount">
+        <input type="submit" name="submit" value="Submit" required>
+    </form>
+{% endblock %}

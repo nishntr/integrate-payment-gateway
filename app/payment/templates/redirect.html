@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Redirect To PayU</title>
+</head>
+
+<body>
+    <h2>Payment</h2>
+    <section>
+        <span><b>Total Amount:</b> ₹{{amount}}</span>
+    </section>
+    <section>
+        <h3>Pay using </h3>
+        <input type="radio" id="radiobtn">
+        <label for="submit"><img height="10%" width="10%"
+                src="https://seeklogo.com/images/P/payu-logo-C104D0EC9F-seeklogo.com.png" alt="PayU">
+        </label>
+    </section>
+
+    <form method="post" action="https://test.payu.in/_payment" name="form">
+        {% csrf_token %}
+        <input type="hidden" name="key" value="{{key}}">
+        <input type="hidden" name="txnid" value="{{txnid}}">
+        <input type="hidden" name="amount" value="{{amount}}">
+        <input type="hidden" name="productinfo" value="{{product}}">
+        <input type="hidden" name="firstname" value="{{name}}">
+        <input type="hidden" name="email" value="{{email}}">
+        <input type="hidden" name="surl" value="{{surl}}">
+        <input type="hidden" name="hash" value="{{hash}}">
+
+    </form>
+    <button onclick="check()" id="button">Submit</button>
+</body>
+<script>
+    function check() {
+        radio = document.getElementById("radiobtn");
+        console.log(radio.checked);
+
+        if (radio.checked) {
+            document.form.submit();
+        }
+    }
+</script>
+
+</html>
