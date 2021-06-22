@@ -1,6 +1,7 @@
 from accounts.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 import random
 import string
 import hashlib
@@ -26,16 +27,18 @@ class checkout(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         key = 'gtKFFx'
         salt = 'wia56q6O'
-        amount = request.POST.get('amount')
-        product = request.POST.get('product')
+        product_id = request.POST.get('pk')
         name = request.user.name
         email = request.user.email
 
         txnid = ''.join(random.choices(
             string.ascii_uppercase + string.digits, k=24))
 
+        product = Product.objects.get(pk=product_id)
+        amount = str(product.price)
+
         strg = key + '|' + txnid + '|' + amount + '|' + \
-            product + '|' + name + '|' + email + '|||||||||||' + salt
+            product.name + '|' + name + '|' + email + '|||||||||||' + salt
         hash = hashlib.sha512(strg.encode()).hexdigest()
 
         context = {
@@ -43,7 +46,7 @@ class checkout(LoginRequiredMixin, View):
             'salt': salt,
             'txnid': txnid,
             'amount': amount,
-            'product': product,
+            'product': product.name,
             'name': name,
             'email': email,
             'surl': 'http://localhost:8000/status/',
@@ -51,31 +54,24 @@ class checkout(LoginRequiredMixin, View):
             'hash': hash
 
         }
-        # amount = request.POST.get('amount')
-        # product = request.POST.get('productinfo')
-        # email = request.POST.get('email')
-        # user = request.POST.get('firstname')
-        t = Transaction(txnid=txnid, amount=amount,
+
+        t = Transaction(txnid=txnid,
                         product=product, user=request.user, email=email)
         t.save()
 
         return render(request, 'redirect.html', context=context)
 
 
+@login_required(login_url='/login/')
 @csrf_exempt
 def status(request):
     if request.method == "POST":
         data = dict(request.POST)
         status = request.POST.get('status')
         txnid = request.POST.get('txnid')
+
+        t = Transaction.objects.get(txnid=txnid)
         if status == 'success':
-
-            # amount = request.POST.get('amount')
-            # product = request.POST.get('productinfo')
-            # email = request.POST.get('email')
-            # user = request.POST.get('firstname')
-
-            t = Transaction.objects.get(txnid=txnid)
             t.status = True
             t.save()
             print("completed for:" + t.user.name)
@@ -83,7 +79,8 @@ def status(request):
         context = {
             'txnid': txnid,
             'status': status,
-            'product': data['productinfo']
+            'product': t.product.name,
+
         }
 
         return render(request, 'status.html', context=context)
@@ -94,6 +91,7 @@ class OrdersList(LoginRequiredMixin, ListView):
 
     model = Transaction
     template_name = "orders.html"
+    ordering = ['-date']
 
     # Array
     # (

@@ -4,26 +4,28 @@
 <div class="container">
   <div class="row row-cols-3">
     {% for product in products %}
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{product.name}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">₹ {{product.price}}</h6>
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="product" value="{{product.name}}">
-                    <input type="hidden" name="amount" value="{{product.price}}">
-                    <input class="btn btn-outline-success" type="submit" name="submit" value="Buy">
-                </form>
-            </div>
-            </div>
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <img src={{product.img_url}}
+            style=" max-height:200px;display: block; margin-left: auto; margin-right: auto;width: auto;"
+            class="card-img-top">
+          <h5 class="card-title">{{product.name}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">₹ {{product.price}}</h6>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="pk" value="{{product.pk}}">
+            <input class="btn btn-outline-success" type="submit" name="submit" value="Buy">
+          </form>
         </div>
+      </div>
+    </div>
     {% endfor %}
-    
-    
+
+
   </div>
 </div>
 
 
-    
+
 {% endblock %}

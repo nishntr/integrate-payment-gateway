@@ -1,34 +1,37 @@
 {% extends "base.html" %}
 {% block body %}
-<h3 class="display-6">Payment</h3>
-<hr>
-<section>
-    <span><b>Total Amount:</b> ₹{{amount}}</span>
-</section>
-<section>
-    <h4>Pay using </h4>
-    <div class="form-check p-3 mb-3">
-        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-        <label class="form-check-label" for="gridRadios2">
-            <img height="40%" width="40%" src="https://seeklogo.com/images/P/payu-logo-C104D0EC9F-seeklogo.com.png"
-                alt="PayU">
-        </label>
-    </div>
+<div class="container m-3 p-3 border">
+    <h3 class="display-6">Payment</h3>
+    <hr>
+    <section>
+        <span><b>Total Amount:</b> ₹{{amount}}</span>
+    </section>
+    <section>
+        <h4>Pay using </h4>
+        <div class="form-check p-3 mb-3">
+            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+            <label class="form-check-label" for="gridRadios2">
+                <img height="40%" width="40%" src="https://seeklogo.com/images/P/payu-logo-C104D0EC9F-seeklogo.com.png"
+                    alt="PayU">
+            </label>
+        </div>
 
-</section>
+    </section>
 
-<form method="post" action="https://test.payu.in/_payment" name="form">
-    {% csrf_token %}
-    <input type="hidden" name="key" value="{{key}}">
-    <input type="hidden" name="txnid" value="{{txnid}}">
-    <input type="hidden" name="amount" value="{{amount}}">
-    <input type="hidden" name="productinfo" value="{{product}}">
-    <input type="hidden" name="firstname" value="{{name}}">
-    <input type="hidden" name="email" value="{{email}}">
-    <input type="hidden" name="surl" value="{{surl}}">
-    <input type="hidden" name="hash" value="{{hash}}">
-</form>
-<button class="btn btn-primary" onclick="check()" id="button">Submit</button>
+    <form method="post" action="https://test.payu.in/_payment" name="form">
+        {% csrf_token %}
+        <input type="hidden" name="key" value="{{key}}">
+        <input type="hidden" name="txnid" value="{{txnid}}">
+        <input type="hidden" name="amount" value="{{amount}}">
+        <input type="hidden" name="productinfo" value="{{product}}">
+        <input type="hidden" name="firstname" value="{{name}}">
+        <input type="hidden" name="email" value="{{email}}">
+        <input type="hidden" name="surl" value="{{surl}}">
+        <input type="hidden" name="hash" value="{{hash}}">
+    </form>
+    <button class="btn btn-primary mb-3" onclick="check()" id="button">Submit</button>
+
+</div>
 {% endblock %}
 {% block script %}
 <script>

@@ -7,6 +7,7 @@ from accounts.models import User
 class Product(models.Model):
     name = models.CharField(max_length=30)
     price = models.DecimalField(max_digits=7, decimal_places=2)
+    img_url = models.CharField(max_length=300)
     stock = models.IntegerField()
 
     def get_name(self):
@@ -19,9 +20,7 @@ class Product(models.Model):
 class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     txnid = models.CharField(max_length=40, unique=True)
-    # product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
-    product = models.CharField(max_length=30)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
     email = models.EmailField(max_length=40)
     date = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=False)

@@ -13,8 +13,8 @@
         {% for order in object_list %}
         
         <tr>
-        <td>{{order.product}}</td>
-        <td>{{order.amount}}</td>
+        <td>{{order.product.name}}</td>
+        <td>{{order.product.price}}</td>
         <td>
             {% if order.status %}
                 <span class="badge bg-success">Complete</span>
