@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container border p-3" style="max-width:876px">
+    <table class="table">
+    <thead>
+        <tr>
+        <th scope="col">Product</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in object_list %}
+        
+        <tr>
+        <td>{{order.product}}</td>
+        <td>{{order.amount}}</td>
+        <td>
+            {% if order.status %}
+                <span class="badge bg-success">Complete</span>
+            {% else %}
+                <span class="badge bg-warning text-dark">Failed</span>
+            {% endif %}
+        </td>
+        </tr>
+        
+        {% endfor %}
+    
+    </tbody>
+    </table>
+</div>
+
+{% endblock %}

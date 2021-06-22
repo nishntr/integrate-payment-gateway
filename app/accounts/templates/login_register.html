@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block body %}
+
+  
+        <div class="container-md border p-3" style="max-width:576px">
+
+            {% if page == 'login' %}
+            <form method='post' >
+                {% csrf_token %}
+                <h1>Login</h1>
+                <div class="mb-3">
+                    <label for="usernameInput" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="usernameInput">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-3">Submit</button>
+                <p>Don't have an account?  <a href="{% url 'accounts:register' %}">Register</a></p>
+            </form>
+            {% else %}
+            <form method='post' >
+                <h1>Register</h1>
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    {{ field.label_tag }}
+                    {{ field }}
+                                
+                {% endfor %}
+                <button type="submit" class="btn btn-primary mb-3 mt-3">Submit</button>
+                <p>Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+
+            </form>
+            {% endif %}
+        </div>
+
+{% endblock %}
