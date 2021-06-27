@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from accounts.models import User
+from django.urls import reverse
 # Create your models here.
 
 
@@ -31,6 +32,8 @@ class Transaction(models.Model):
 
     # def get_product_name(self):
     #     return self.product.get_name()
+    def get_absolute_url(self):
+        return reverse("payment:status", kwargs={"id": self.txnid})
 
     def __str__(self):
         return self.txnid

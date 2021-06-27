@@ -2,10 +2,12 @@ from accounts.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.urls import reverse
 import random
 import string
 import hashlib
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.list import ListView
 from .models import Transaction
@@ -21,6 +23,8 @@ class checkout(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         products = Product.objects.all()
+
+        print([request.session[x] for x in request.session.keys()])
 
         return render(request, 'checkout.html', {'products': products})
 
@@ -49,8 +53,8 @@ class checkout(LoginRequiredMixin, View):
             'product': product.name,
             'name': name,
             'email': email,
-            'surl': 'http://localhost:8000/status/',
-            'furl': 'http://localhost:8000/status/',
+            'surl': 'http://localhost:8000/statusRedirect/',
+            'furl': 'http://localhost:8000/statusRedirect/',
             'hash': hash
 
         }
@@ -62,13 +66,13 @@ class checkout(LoginRequiredMixin, View):
         return render(request, 'redirect.html', context=context)
 
 
-@login_required(login_url='/login/')
-@csrf_exempt
-def status(request):
-    if request.method == "POST":
-        data = dict(request.POST)
+# @method_decorator(csrf_exempt, name='dispatch')
+class statusRedirect(View):
+
+    def post(self, request, *args, **kwargs):
         status = request.POST.get('status')
         txnid = request.POST.get('txnid')
+        print(request.session.keys())
 
         t = Transaction.objects.get(txnid=txnid)
         if status == 'success':
@@ -76,13 +80,32 @@ def status(request):
             t.save()
             print("completed for:" + t.user.name)
 
+        # context = {
+        #     'txnid': txnid,
+        #     'status': status,
+        #     'product': t.product.name,
+
+        # }
+        # request.session['txnid'] = txnid
+        # request.session['status'] = status
+        # request.session['product'] = t.product.name
+
+        return redirect(t)
+
+
+class status(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        print(kwargs)
+        txnid = kwargs['id']
+        t = Transaction.objects.get(txnid=txnid)
         context = {
             'txnid': txnid,
-            'status': status,
+            'status': t.status,
             'product': t.product.name,
 
         }
-
         return render(request, 'status.html', context=context)
 
 
@@ -91,10 +114,32 @@ class OrdersList(LoginRequiredMixin, ListView):
 
     model = Transaction
     template_name = "orders.html"
-    ordering = ['-date']
 
     def get_queryset(self):
-        return self.request.user.orders.all()
+        return self.request.user.orders.all().order_by('-date')
+
+# @login_required(login_url='/login/')
+# @csrf_exempt
+# def status(request):
+#     if request.method == "POST":
+#         data = dict(request.POST)
+#         status = request.POST.get('status')
+#         txnid = request.POST.get('txnid')
+
+#         t = Transaction.objects.get(txnid=txnid)
+#         if status == 'success':
+#             t.status = True
+#             t.save()
+#             print("completed for:" + t.user.name)
+
+#         context = {
+#             'txnid': txnid,
+#             'status': status,
+#             'product': t.product.name,
+
+#         }
+
+#         return render(request, 'status.html', context=context)
 
     # Array
     # (
