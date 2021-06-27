@@ -18,7 +18,8 @@ class Product(models.Model):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='orders')
     txnid = models.CharField(max_length=40, unique=True)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     email = models.EmailField(max_length=40)

@@ -93,6 +93,9 @@ class OrdersList(LoginRequiredMixin, ListView):
     template_name = "orders.html"
     ordering = ['-date']
 
+    def get_queryset(self):
+        return self.request.user.orders.all()
+
     # Array
     # (
     #     [mihpayid] => 13297721729
