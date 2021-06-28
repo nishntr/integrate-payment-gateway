@@ -1,17 +1,25 @@
 {% extends "base.html" %}
 {% block body %}
-    <div class="container border w-50">
-        
-        {% if status  %}
-            <h3>Your Order has been placed</h3><hr>
-            <p>Payment Approved</p>
-        {% else %}
-            <h3>Order Failed!</h3><hr>
-            <p>Payment Failed</p>
-        {% endif %} 
-        <p>Product: {{product}}</p>
-        
-        <p>Order id: {{txnid}}</p>
+<div class="row justify-content-md-center">
+    <div class="col-lg-6 col-sm-12 ">
+
+        <div class="container-fluid border p-3">
+
+            {% if status %}
+            <h3>Your Order has been placed!</h3>
+            <hr>
+            <p style="color: green;">Payment Approved</p>
+            {% else %}
+            <h3>Order Failed!</h3>
+            <hr>
+            <p style="color: red;">Payment Failed</p>
+            {% endif %}
+            <p>Product: {{product}}</p>
+
+            <p>Order id: {{txnid}}</p>
+            <a class="btn btn-outline-success" href="/orders/">Orders</a>
+        </div>
     </div>
+</div>
 
 {% endblock %}

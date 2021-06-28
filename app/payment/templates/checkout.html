@@ -2,9 +2,9 @@
 {% block body %}
 
 <div class="container">
-  <div class="row row-cols-3">
+  <div class="row justify-content-md-center">
     {% for product in products %}
-    <div class="col">
+    <div class="col-lg-4 col-md-auto mb-3">
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <img src={{product.img_url}}
